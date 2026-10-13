@@ -15,9 +15,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-     $tasks = Task::orderBy('created_at', 'asc')->get();
+     $tasks = Task::where('status', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-     return view('tasks.index', compact('tasks'));//
+        return view('tasks.index', compact('tasks'));
     }
 
     /**
@@ -38,7 +40,20 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|max:100|unique:tasks,name',
+        ], [
+            'name.required' => 'タスク名を入力してください。',
+            'name.max'      => 'タスク名は100文字以内で入力してください。',
+            'name.unique'   => 'タスク名はすでに登録されています',
+        ]);
+
+        Task::create([
+            'name'   => $validated['name'],
+            'status' => false,
+        ]);
+
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -83,6 +98,17 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+    }
+public function complete($id)
+    {
+        $task = Task::find($id);
+        $task->status = true;
+        $task->save();
+
+        return redirect()->route('tasks.index');
     }
 }
+
+
+    
