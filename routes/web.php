@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('tasks.index');
 });
 
 Route::resource('tasks', TaskController::class)
-    ->only(['index', 'store']);
-    
+    ->only(['index', 'store', 'edit', 'update', 'destroy']);
+
 Route::patch('/tasks/{id}/complete', [TaskController::class, 'complete'])
     ->name('tasks.complete');
-    
+

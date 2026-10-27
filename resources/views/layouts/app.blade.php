@@ -16,12 +16,17 @@
 
     <main>
         <div class="container">
+            {{-- 直前の処理からのお知らせ（フラッシュメッセージ） --}}
+            @if (session('message'))
+                <p class="alert">{{ session('message') }}</p>
+            @endif
+
             @yield('content')
         </div>
     </main>
 
     <footer class="site-footer">
-        <div class="container inner">作成 大浦 隼</div>
+        <div class="container inner">Todoアプリ - Laravel ハンズオン</div>
     </footer>
 </body>
 </html>
